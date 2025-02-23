@@ -11,7 +11,13 @@ const ASSETS = [
   '/Klan kosova.png',
   '/clubfm.png',
   '/topalbania.png',
-  '/top-gold-radio.png'
+  '/top-gold-radio.png',
+
+  // Shto skedarët e imazheve të reja
+  '/my-music.png',
+  '/travel.jpg',
+  '/chill.jpg',
+  '/love.webp'
 ];
 
 self.addEventListener('install', (event) => {
