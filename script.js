@@ -17,26 +17,18 @@ document.querySelectorAll('.nav-menu ul li a').forEach(link => {
 
 // Funksioni për player-at audio
 const sounds = [
-    new Howl({
-        src: ['https://cp1.sednastream.com/proxy/radioone94?mp=/stream'],
-        html5: true,
-    }),
-    new Howl({
-        src: ['https://s4.radio.co/sd1d1904dc/listen'],
-        html5: true,
-    }),
-    new Howl({
-        src: ['https://cp1.sednastream.com/proxy/clubfm?mp=/stream'],
-        html5: true,
-    }),
-    new Howl({
-        src: ['https://live.topgold.al/tar'],
-        html5: true,
-    }),
-    new Howl({
-        src: ['https://live.topgold.al/topgold'],
-        html5: true,
-    })
+    // Kanale ekzistuese
+    new Howl({ src: ['https://cp1.sednastream.com/proxy/radioone94?mp=/stream'], html5: true }),
+    new Howl({ src: ['https://s4.radio.co/sd1d1904dc/listen'], html5: true }),
+    new Howl({ src: ['https://cp1.sednastream.com/proxy/clubfm?mp=/stream'], html5: true }),
+    new Howl({ src: ['https://live.topgold.al/tar'], html5: true }),
+    new Howl({ src: ['https://live.topgold.al/topgold'], html5: true }),
+
+    // Kanale të reja
+    new Howl({ src: ['https://live.top-media.al/mmr'], html5: true }), // My Music
+    new Howl({ src: ['https://cp1.sednastream.com/proxy/radiotravel?mp=/stream'], html5: true }), // Radio Travel
+    new Howl({ src: ['https://eu8.fastcast4u.com/proxy/chillradio?mp=/1'], html5: true }), // Chill Radio
+    new Howl({ src: ['https://antena.albaniadigitalradio.al/loveradio'], html5: true }) // Love Radio
 ];
 
 document.querySelectorAll('.audio-player').forEach((player, index) => {
