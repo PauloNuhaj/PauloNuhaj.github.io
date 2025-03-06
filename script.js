@@ -31,23 +31,24 @@ const sounds = [
     new Howl({ src: ['https://antena.albaniadigitalradio.al/loveradio'], html5: true }) // Love Radio
 ];
 
+let currentSoundIndex = -1;
+
 document.querySelectorAll('.audio-player').forEach((player, index) => {
     const playPauseButton = player.querySelector('.play-pause');
     const volumeControl = player.querySelector('.volume');
 
     playPauseButton.addEventListener('click', () => {
-        if (sounds[index].playing()) {
+        if (currentSoundIndex === index && sounds[index].playing()) {
             sounds[index].pause();
             playPauseButton.textContent = 'Play';
         } else {
-            sounds.forEach((sound, i) => {
-                if (i !== index && sound.playing()) {
-                    sound.pause();
-                    document.querySelectorAll('.play-pause')[i].textContent = 'Play';
-                }
-            });
+            if (currentSoundIndex !== -1 && sounds[currentSoundIndex].playing()) {
+                sounds[currentSoundIndex].pause();
+                document.querySelectorAll('.play-pause')[currentSoundIndex].textContent = 'Play';
+            }
             sounds[index].play();
             playPauseButton.textContent = 'Pause';
+            currentSoundIndex = index;
         }
     });
 
@@ -76,4 +77,29 @@ document.getElementById('scrollToTop').addEventListener('click', function() {
 // Fshij loader-in kur faqja të ngarkohet
 window.addEventListener('load', function() {
     document.querySelector('.loader').style.display = 'none';
+});
+
+// Kontrolli i audio player-it global
+const globalPlayPauseButton = document.getElementById('play-pause');
+const prevButton = document.getElementById('prev');
+const nextButton = document.getElementById('next');
+
+prevButton.addEventListener('click', () => {
+    if (currentSoundIndex > 0) {
+        const newIndex = currentSoundIndex - 1;
+        document.querySelectorAll('.play-pause')[newIndex].click();
+    }
+});
+
+nextButton.addEventListener('click', () => {
+    if (currentSoundIndex < sounds.length - 1) {
+        const newIndex = currentSoundIndex + 1;
+        document.querySelectorAll('.play-pause')[newIndex].click();
+    }
+});
+
+globalPlayPauseButton.addEventListener('click', () => {
+    if (currentSoundIndex !== -1) {
+        document.querySelectorAll('.play-pause')[currentSoundIndex].click();
+    }
 });
