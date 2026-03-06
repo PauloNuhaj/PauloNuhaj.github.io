@@ -2,6 +2,7 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
+    padding-bottom: 40px;
     background-color: #f4f4f4;
     color: #333;
 }
@@ -377,3 +378,41 @@ footer {
 .now-playing #current-channel {
     font-weight: bold;
 }
+/* Mobile layout për radio kanalet */
+@media (max-width: 768px) {
+
+    .channel-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    padding:10px;
+    }
+    
+    .channel{
+    width:100%;
+    padding:10px;
+    }
+    
+    .channel h3{
+    font-size:14px;
+    }
+    
+    .channel p{
+    display:none;
+    }
+    
+    .channel img{
+    height:100px;
+    object-fit:cover;
+    }
+    
+    .play-pause{
+    padding:6px 12px;
+    font-size:12px;
+    }
+    
+    .volume{
+    width:60px;
+    }
+    
+    }
