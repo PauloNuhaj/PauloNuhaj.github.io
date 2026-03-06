@@ -197,14 +197,15 @@ nav ul li a:hover {
 .audio-player {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     margin-top: 15px;
 }
 
 .play-pause {
-    padding: 10px 20px;
-    background-color: #ffcc00;
-    color: #333;
+    padding: 10px 22px;
+    background-color: #0073e6;
+    color: #fff;
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -212,7 +213,7 @@ nav ul li a:hover {
 }
 
 .play-pause:hover {
-    background-color: #e6b800;
+    background-color: #005bb5;
 }
 
 .volume {
@@ -333,7 +334,8 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
@@ -423,6 +425,7 @@ footer {
         padding: 18px 20px;
         justify-content: space-between;
         min-height: 80px;
+        padding-bottom: calc(18px + env(safe-area-inset-bottom));
     }
 
     #audio-player button {
