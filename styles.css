@@ -414,5 +414,13 @@ footer {
     .volume{
     width:60px;
     }
-    
+    @media (max-width: 768px) {
+
+.volume,
+.volume-control,
+#audio-player .volume-control{
+display:none !important;
+}
+
+}
     }
