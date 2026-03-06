@@ -378,49 +378,61 @@ footer {
 .now-playing #current-channel {
     font-weight: bold;
 }
-/* Mobile layout për radio kanalet */
+/* Mobile layout për radio kanalet dhe player-in */
 @media (max-width: 768px) {
 
-    .channel-list{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
-    padding:10px;
+    .channel-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 10px;
     }
     
-    .channel{
-    width:100%;
-    padding:10px;
+    .channel {
+        width: 100%;
+        padding: 10px;
     }
     
-    .channel h3{
-    font-size:14px;
+    .channel h3 {
+        font-size: 14px;
     }
     
-    .channel p{
-    display:none;
+    .channel p {
+        display: none;
     }
     
-    .channel img{
-    height:100px;
-    object-fit:cover;
+    .channel img {
+        height: 110px;
+        object-fit: cover;
+        border-radius: 12px;
     }
     
-    .play-pause{
-    padding:6px 12px;
-    font-size:12px;
+    .play-pause {
+        padding: 6px 14px;
+        font-size: 13px;
     }
-    
-    .volume{
-    width:60px;
-    }
-    @media (max-width: 768px) {
 
-.volume,
-.volume-control,
-#audio-player .volume-control{
-display:none !important;
-}
-
-}
+    /* Fshi të gjitha kontrollat e volumit në mobile */
+    .volume,
+    .volume-control,
+    #audio-player .volume-control {
+        display: none !important;
     }
+
+    /* Player bar më i qartë për mobile */
+    #audio-player {
+        padding: 12px 16px;
+        justify-content: space-between;
+    }
+
+    #audio-player button {
+        font-size: 22px;
+    }
+
+    .now-playing {
+        flex: 1;
+        margin-left: 10px;
+        text-align: center;
+        font-size: 13px;
+    }
+}

@@ -37,13 +37,17 @@ const nextButton = document.getElementById('next');
 const globalIcon = globalPlayPauseButton.querySelector('i');
 
 const channelButtons = document.querySelectorAll('.play-pause');
+const nowPlayingLabel = document.getElementById('current-channel');
 
 document.querySelectorAll('.audio-player').forEach((player, index) => {
 
     const playPauseButton = player.querySelector('.play-pause');
     const volumeControl = player.querySelector('.volume');
+    const channelCard = player.closest('.channel');
+    const channelImage = channelCard ? channelCard.querySelector('img') : null;
+    const channelTitle = channelCard ? channelCard.querySelector('h3') : null;
 
-    playPauseButton.addEventListener('click', () => {
+    const toggleChannelPlayback = () => {
 
         if (currentSoundIndex === index && sounds[index].playing()) {
 
@@ -67,15 +71,28 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
 
             currentSoundIndex = index;
 
+            if (channelTitle && nowPlayingLabel) {
+                nowPlayingLabel.textContent = channelTitle.textContent;
+            }
+
             globalIcon.classList.remove('fa-play');
             globalIcon.classList.add('fa-pause');
         }
 
-    });
+    };
 
-    volumeControl.addEventListener('input', () => {
-        sounds[index].volume(volumeControl.value);
-    });
+    playPauseButton.addEventListener('click', toggleChannelPlayback);
+
+    if (channelImage) {
+        channelImage.style.cursor = 'pointer';
+        channelImage.addEventListener('click', toggleChannelPlayback);
+    }
+
+    if (volumeControl) {
+        volumeControl.addEventListener('input', () => {
+            sounds[index].volume(volumeControl.value);
+        });
+    }
 
 });
 
