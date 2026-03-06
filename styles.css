@@ -216,8 +216,7 @@ nav ul li a:hover {
 }
 
 .volume {
-    width: 100px;
-    cursor: pointer;
+    display: none;
 }
 
 .about, .programs, .contact {
