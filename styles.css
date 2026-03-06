@@ -403,7 +403,9 @@ footer {
     }
     
     .channel img {
-        height: 110px;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
         border-radius: 12px;
     }
@@ -420,22 +422,27 @@ footer {
         display: none !important;
     }
 
-    /* Player bar më i qartë për mobile */
+    /* Player bar pak më i vogël në mobile */
     #audio-player {
-        padding: 18px 20px;
+        padding: 8px 14px;
         justify-content: space-between;
-        min-height: 80px;
-        padding-bottom: calc(18px + env(safe-area-inset-bottom));
+        min-height: 56px;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
     }
 
     #audio-player button {
-        font-size: 26px;
+        font-size: 20px;
     }
 
     .now-playing {
         flex: 1;
         margin-left: 12px;
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
+    }
+
+    /* Footer pak më i lartë në mobile që ikonat të mos preken nga player bar */
+    footer {
+        padding-bottom: 52px;
     }
 }
