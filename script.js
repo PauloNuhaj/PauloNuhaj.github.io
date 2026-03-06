@@ -83,6 +83,7 @@ window.addEventListener('load', function() {
 const globalPlayPauseButton = document.getElementById('play-pause');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
+const globalIcon = globalPlayPauseButton.querySelector('i');
 
 prevButton.addEventListener('click', () => {
     if (currentSoundIndex > 0) {
@@ -100,6 +101,16 @@ nextButton.addEventListener('click', () => {
 
 globalPlayPauseButton.addEventListener('click', () => {
     if (currentSoundIndex !== -1) {
-        document.querySelectorAll('.play-pause')[currentSoundIndex].click();
+
+        if (sounds[currentSoundIndex].playing()) {
+            sounds[currentSoundIndex].pause();
+            globalIcon.classList.remove('fa-pause');
+            globalIcon.classList.add('fa-play');
+        } else {
+            sounds[currentSoundIndex].play();
+            globalIcon.classList.remove('fa-play');
+            globalIcon.classList.add('fa-pause');
+        }
+
     }
 });
