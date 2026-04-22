@@ -7,6 +7,55 @@ body {
     color: #333;
 }
 
+/* Dark mode (normal UI only) */
+body.dark {
+    background-color: #0b0f16;
+    color: #e8eefc;
+}
+
+body.dark header {
+    background-color: #0f172a;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .nav-menu {
+    background-color: #0f172a;
+}
+
+body.dark .channels {
+    background-color: #0b0f16;
+}
+
+body.dark .channel,
+body.dark .about,
+body.dark .programs,
+body.dark .contact {
+    background-color: #0f172a;
+    color: #e8eefc;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .channel p,
+body.dark .about p,
+body.dark .contact p {
+    color: rgba(232, 238, 252, 0.75);
+}
+
+body.dark .channels h2,
+body.dark .about h2,
+body.dark .programs h2,
+body.dark .contact h2 {
+    color: #e8eefc;
+}
+
+body.dark footer {
+    background-color: #0f172a;
+}
+
+body.dark #audio-player {
+    background-color: #0f172a;
+}
+
 header {
     background-color: #333;
     color: #fff;
@@ -24,14 +73,36 @@ header .logo img {
     height: 50px;
 }
 
+.dark-mode-toggle {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border-radius: 14px;
+    padding: 12px 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.dark-mode-toggle i {
+    font-size: 20px;
+}
+
+.dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
 .car-mode-toggle {
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.18);
     color: #fff;
-    border-radius: 12px;
-    padding: 10px 12px;
+    border-radius: 14px;
+    padding: 12px 16px;
     cursor: pointer;
     margin-left: 12px;
+}
+
+.car-mode-toggle i {
+    font-size: 20px;
 }
 
 .car-mode-toggle:hover {

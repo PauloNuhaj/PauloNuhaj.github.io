@@ -1,11 +1,51 @@
 // Funksioni për hamburger menu
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+const darkModeToggle = document.getElementById('dark-mode-toggle');
 
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 });
+
+// Dark mode toggle (persisted)
+const DARK_MODE_STORAGE_KEY = 'radioal_dark_mode';
+
+function applyDarkMode(isDark) {
+    document.body.classList.toggle('dark', isDark);
+    if (darkModeToggle) {
+        const icon = darkModeToggle.querySelector('i');
+        if (icon) {
+            icon.classList.toggle('fa-moon', !isDark);
+            icon.classList.toggle('fa-sun', isDark);
+        }
+        darkModeToggle.setAttribute('aria-label', isDark ? 'Light Mode' : 'Dark Mode');
+        darkModeToggle.setAttribute('title', isDark ? 'Light Mode' : 'Dark Mode');
+    }
+}
+
+try {
+    const saved = localStorage.getItem(DARK_MODE_STORAGE_KEY);
+    if (saved === null) {
+        applyDarkMode(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    } else {
+        applyDarkMode(saved === '1');
+    }
+} catch (e) {
+    // ignore storage errors
+}
+
+if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', () => {
+        const isDark = !document.body.classList.contains('dark');
+        applyDarkMode(isDark);
+        try {
+            localStorage.setItem(DARK_MODE_STORAGE_KEY, isDark ? '1' : '0');
+        } catch (e) {
+            // ignore storage errors
+        }
+    });
+}
 
 // Mbyll menunë kur klikohet një lidhje
 document.querySelectorAll('.nav-menu ul li a').forEach(link => {
