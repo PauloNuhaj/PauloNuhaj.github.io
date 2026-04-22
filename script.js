@@ -245,6 +245,89 @@ function setPlaybackStateForMediaSession() {
     }
 }
 
+function registerMediaSessionHandlers() {
+    if (!('mediaSession' in navigator)) return;
+    try {
+        navigator.mediaSession.setActionHandler('previoustrack', () => prevChannel());
+        navigator.mediaSession.setActionHandler('nexttrack', () => nextChannel());
+        navigator.mediaSession.setActionHandler('play', () => {
+            if (currentSoundIndex === -1) {
+                playChannel(0);
+            } else if (!sounds[currentSoundIndex].playing()) {
+                sounds[currentSoundIndex].play();
+                syncUIAfterPlaybackChange();
+            }
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            if (currentSoundIndex !== -1 && sounds[currentSoundIndex].playing()) {
+                sounds[currentSoundIndex].pause();
+                syncUIAfterPlaybackChange();
+            }
+        });
+    } catch (e) {
+        // ignore
+    }
+}
+
+function syncUIAfterPlaybackChange() {
+    // global icon
+    const playing = currentSoundIndex !== -1 && sounds[currentSoundIndex].playing();
+    globalIcon.classList.toggle('fa-play', !playing);
+    globalIcon.classList.toggle('fa-pause', playing);
+
+    // per-channel buttons text
+    channelButtons.forEach((btn, idx) => {
+        btn.textContent = (idx === currentSoundIndex && playing) ? 'Pause' : 'Play';
+    });
+
+    // labels/artwork + car mode
+    if (nowPlayingLabel) {
+        if (currentSoundIndex === -1) nowPlayingLabel.textContent = 'Zgjidhni një kanal';
+        else nowPlayingLabel.textContent = getChannelMeta(currentSoundIndex).title;
+    }
+    updateCarModeUI();
+    updateGlobalArtworkAndMediaSession();
+    setPlaybackStateForMediaSession();
+}
+
+function playChannel(index) {
+    const clamped = ((index % sounds.length) + sounds.length) % sounds.length;
+
+    if (currentSoundIndex !== -1 && sounds[currentSoundIndex].playing()) {
+        sounds[currentSoundIndex].pause();
+    }
+
+    currentSoundIndex = clamped;
+    sounds[currentSoundIndex].play();
+
+    // iOS tends to require handlers set after playback begins
+    registerMediaSessionHandlers();
+    syncUIAfterPlaybackChange();
+}
+
+function toggleCurrent() {
+    if (currentSoundIndex === -1) {
+        playChannel(0);
+        return;
+    }
+    if (sounds[currentSoundIndex].playing()) sounds[currentSoundIndex].pause();
+    else sounds[currentSoundIndex].play();
+    registerMediaSessionHandlers();
+    syncUIAfterPlaybackChange();
+}
+
+function nextChannel() {
+    if (sounds.length === 0) return;
+    const nextIdx = currentSoundIndex === -1 ? 0 : currentSoundIndex + 1;
+    playChannel(nextIdx);
+}
+
+function prevChannel() {
+    if (sounds.length === 0) return;
+    const prevIdx = currentSoundIndex === -1 ? 0 : currentSoundIndex - 1;
+    playChannel(prevIdx);
+}
+
 function setPlayIconFor(buttonEl, isPlaying) {
     const icon = buttonEl ? buttonEl.querySelector('i') : null;
     if (!icon) return;
@@ -261,8 +344,6 @@ function updateCarModeUI() {
         carModeLogo.setAttribute('src', 'Radio.png');
         carModeBg.style.backgroundImage = 'url("Radio.png")';
         setPlayIconFor(carModePlay, false);
-        updateGlobalArtworkAndMediaSession();
-        setPlaybackStateForMediaSession();
         return;
     }
 
@@ -276,8 +357,6 @@ function updateCarModeUI() {
     }
 
     setPlayIconFor(carModePlay, sounds[currentSoundIndex].playing());
-    updateGlobalArtworkAndMediaSession();
-    setPlaybackStateForMediaSession();
 }
 
 function openCarMode() {
@@ -311,7 +390,7 @@ if (carModeBack) carModeBack.addEventListener('click', closeCarMode);
 
 if (carModePrev) carModePrev.addEventListener('click', () => prevButton.click());
 if (carModeNext) carModeNext.addEventListener('click', () => nextButton.click());
-if (carModePlay) carModePlay.addEventListener('click', () => globalPlayPauseButton.click());
+if (carModePlay) carModePlay.addEventListener('click', () => toggleCurrent());
 
 if (carMode) {
     carMode.addEventListener('click', (e) => {
@@ -327,26 +406,7 @@ window.addEventListener('keydown', (e) => {
 setLiveMode(getSavedLiveMode());
 updateGlobalArtworkAndMediaSession();
 setPlaybackStateForMediaSession();
-
-// iOS/Android lock-screen controls (Media Session)
-if ('mediaSession' in navigator) {
-    try {
-        navigator.mediaSession.setActionHandler('previoustrack', () => prevButton && prevButton.click());
-        navigator.mediaSession.setActionHandler('nexttrack', () => nextButton && nextButton.click());
-        navigator.mediaSession.setActionHandler('play', () => {
-            if (currentSoundIndex !== -1 && !sounds[currentSoundIndex].playing()) {
-                channelButtons[currentSoundIndex].click();
-            }
-        });
-        navigator.mediaSession.setActionHandler('pause', () => {
-            if (currentSoundIndex !== -1 && sounds[currentSoundIndex].playing()) {
-                channelButtons[currentSoundIndex].click();
-            }
-        });
-    } catch (e) {
-        // ignore
-    }
-}
+registerMediaSessionHandlers();
 
 document.querySelectorAll('.audio-player').forEach((player, index) => {
 
@@ -357,43 +417,11 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
     const channelTitle = channelCard ? channelCard.querySelector('h3') : null;
 
     const toggleChannelPlayback = () => {
-
-        if (currentSoundIndex === index && sounds[index].playing()) {
-
-            sounds[index].pause();
-            playPauseButton.textContent = 'Play';
-
-            globalIcon.classList.remove('fa-pause');
-            globalIcon.classList.add('fa-play');
-            updateCarModeUI();
-            updateGlobalArtworkAndMediaSession();
-            setPlaybackStateForMediaSession();
-
-        } else {
-
-            if (currentSoundIndex !== -1 && sounds[currentSoundIndex].playing()) {
-
-                sounds[currentSoundIndex].pause();
-                channelButtons[currentSoundIndex].textContent = 'Play';
-
-            }
-
-            sounds[index].play();
-            playPauseButton.textContent = 'Pause';
-
-            currentSoundIndex = index;
-
-            if (channelTitle && nowPlayingLabel) {
-                nowPlayingLabel.textContent = channelTitle.textContent;
-            }
-
-            globalIcon.classList.remove('fa-play');
-            globalIcon.classList.add('fa-pause');
-            updateCarModeUI();
-            updateGlobalArtworkAndMediaSession();
-            setPlaybackStateForMediaSession();
+        if (currentSoundIndex === index) {
+            toggleCurrent();
+            return;
         }
-
+        playChannel(index);
     };
 
     playPauseButton.addEventListener('click', toggleChannelPlayback);
@@ -421,34 +449,17 @@ window.addEventListener('load', function() {
 // Kontrolli i audio player-it global
 
 prevButton.addEventListener('click', () => {
-
-    if (currentSoundIndex > 0) {
-
-        const newIndex = currentSoundIndex - 1;
-        channelButtons[newIndex].click();
-
-    }
+    prevChannel();
 
 });
 
 nextButton.addEventListener('click', () => {
-
-    if (currentSoundIndex < sounds.length - 1) {
-
-        const newIndex = currentSoundIndex + 1;
-        channelButtons[newIndex].click();
-
-    }
+    nextChannel();
 
 });
 
 globalPlayPauseButton.addEventListener('click', () => {
-
-    if (currentSoundIndex !== -1) {
-
-        channelButtons[currentSoundIndex].click();
-
-    }
+    toggleCurrent();
 
 });
 
