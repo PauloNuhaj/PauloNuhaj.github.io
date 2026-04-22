@@ -71,6 +71,7 @@ const sounds = [
 ];
 
 let currentSoundIndex = -1;
+let lastKnownPlaying = false;
 
 const globalPlayPauseButton = document.getElementById('play-pause');
 const prevButton = document.getElementById('prev');
@@ -218,15 +219,23 @@ function updateGlobalArtworkAndMediaSession() {
 
     if (!('mediaSession' in navigator)) return;
     try {
+        const absoluteArtwork = meta.imgSrc ? new URL(meta.imgSrc, window.location.href).href : '';
+        const ext = absoluteArtwork.split('?')[0].split('#')[0].split('.').pop()?.toLowerCase();
+        const mime =
+            ext === 'png' ? 'image/png' :
+            ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' :
+            ext === 'webp' ? 'image/webp' :
+            '';
+
         navigator.mediaSession.metadata = new MediaMetadata({
             title: meta.title,
             artist: meta.frequency,
             album: 'Radio AL',
-            artwork: meta.imgSrc
+            artwork: absoluteArtwork
                 ? [
-                    { src: meta.imgSrc, sizes: '96x96', type: 'image/png' },
-                    { src: meta.imgSrc, sizes: '192x192', type: 'image/png' },
-                    { src: meta.imgSrc, sizes: '512x512', type: 'image/png' }
+                    { src: absoluteArtwork, sizes: '96x96', type: mime },
+                    { src: absoluteArtwork, sizes: '192x192', type: mime },
+                    { src: absoluteArtwork, sizes: '512x512', type: mime }
                 ]
                 : []
         });
@@ -238,7 +247,7 @@ function updateGlobalArtworkAndMediaSession() {
 function setPlaybackStateForMediaSession() {
     if (!('mediaSession' in navigator)) return;
     try {
-        const playing = currentSoundIndex !== -1 && sounds[currentSoundIndex].playing();
+        const playing = currentSoundIndex !== -1 && lastKnownPlaying;
         navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
     } catch (e) {
         // ignore
@@ -271,7 +280,7 @@ function registerMediaSessionHandlers() {
 
 function syncUIAfterPlaybackChange() {
     // global icon
-    const playing = currentSoundIndex !== -1 && sounds[currentSoundIndex].playing();
+    const playing = currentSoundIndex !== -1 && lastKnownPlaying;
     globalIcon.classList.toggle('fa-play', !playing);
     globalIcon.classList.toggle('fa-pause', playing);
 
@@ -298,6 +307,7 @@ function playChannel(index) {
     }
 
     currentSoundIndex = clamped;
+    lastKnownPlaying = true;
     sounds[currentSoundIndex].play();
 
     // iOS tends to require handlers set after playback begins
@@ -310,8 +320,13 @@ function toggleCurrent() {
         playChannel(0);
         return;
     }
-    if (sounds[currentSoundIndex].playing()) sounds[currentSoundIndex].pause();
-    else sounds[currentSoundIndex].play();
+    if (lastKnownPlaying) {
+        lastKnownPlaying = false;
+        sounds[currentSoundIndex].pause();
+    } else {
+        lastKnownPlaying = true;
+        sounds[currentSoundIndex].play();
+    }
     registerMediaSessionHandlers();
     syncUIAfterPlaybackChange();
 }
@@ -356,7 +371,7 @@ function updateCarModeUI() {
         carModeBg.style.backgroundImage = `url("${meta.imgSrc}")`;
     }
 
-    setPlayIconFor(carModePlay, sounds[currentSoundIndex].playing());
+    setPlayIconFor(carModePlay, lastKnownPlaying);
 }
 
 function openCarMode() {
@@ -388,8 +403,8 @@ function closeCarMode() {
 if (carModeToggle) carModeToggle.addEventListener('click', openCarMode);
 if (carModeBack) carModeBack.addEventListener('click', closeCarMode);
 
-if (carModePrev) carModePrev.addEventListener('click', () => prevButton.click());
-if (carModeNext) carModeNext.addEventListener('click', () => nextButton.click());
+if (carModePrev) carModePrev.addEventListener('click', () => prevChannel());
+if (carModeNext) carModeNext.addEventListener('click', () => nextChannel());
 if (carModePlay) carModePlay.addEventListener('click', () => toggleCurrent());
 
 if (carMode) {
@@ -465,7 +480,18 @@ globalPlayPauseButton.addEventListener('click', () => {
 
 // Keep Car Mode UI in sync if audio ends/errors
 sounds.forEach((s) => {
-    s.on('end', updateCarModeUI);
-    s.on('pause', updateCarModeUI);
-    s.on('play', updateCarModeUI);
+    s.on('end', () => {
+        lastKnownPlaying = false;
+        syncUIAfterPlaybackChange();
+    });
+    s.on('pause', () => {
+        lastKnownPlaying = false;
+        syncUIAfterPlaybackChange();
+    });
+    s.on('play', () => {
+        lastKnownPlaying = true;
+        // iOS: metadata/artwork often appears only after the real play event
+        registerMediaSessionHandlers();
+        syncUIAfterPlaybackChange();
+    });
 });
