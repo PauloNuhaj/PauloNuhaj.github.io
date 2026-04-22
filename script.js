@@ -2,6 +2,7 @@
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 const darkModeToggle = document.getElementById('dark-mode-toggle');
+const headerLogo = document.querySelector('header .logo');
 
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
@@ -75,6 +76,7 @@ const globalPlayPauseButton = document.getElementById('play-pause');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
 const globalIcon = globalPlayPauseButton.querySelector('i');
+const globalArtwork = document.getElementById('current-channel-artwork');
 
 const channelButtons = document.querySelectorAll('.play-pause');
 const nowPlayingLabel = document.getElementById('current-channel');
@@ -90,8 +92,102 @@ const carModeTitle = document.getElementById('car-mode-title');
 const carModeSubtitle = document.getElementById('car-mode-subtitle');
 const carModeLogo = document.getElementById('car-mode-logo');
 const carModeBg = document.getElementById('car-mode-bg');
+const twitchLive = document.getElementById('twitch-live');
+const twitchEmbed = document.getElementById('twitch-embed');
+const twitchCar = document.getElementById('twitch-car');
+const twitchEmbedCar = document.getElementById('twitch-embed-car');
+const adminLiveToggle = document.getElementById('admin-live-toggle');
 
 const channelCards = Array.from(document.querySelectorAll('.channel'));
+
+// Twitch Live Mode (no database)
+const TWITCH_CHANNEL = 'theulfpra';
+const TWITCH_LIVE_STORAGE_KEY = 'radioal_twitch_live';
+let twitchIframeNormal = null;
+let twitchIframeCar = null;
+
+function buildTwitchIframe() {
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('allowfullscreen', 'true');
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('scrolling', 'no');
+    iframe.setAttribute('allow', 'autoplay; fullscreen');
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+
+    const parent = encodeURIComponent(window.location.hostname || 'localhost');
+    iframe.src = `https://player.twitch.tv/?channel=${encodeURIComponent(TWITCH_CHANNEL)}&parent=${parent}&muted=true`;
+    return iframe;
+}
+
+function ensureTwitchEmbeds() {
+    if (twitchEmbed && !twitchIframeNormal) {
+        twitchIframeNormal = buildTwitchIframe();
+        twitchEmbed.appendChild(twitchIframeNormal);
+    }
+    if (twitchEmbedCar && !twitchIframeCar) {
+        twitchIframeCar = buildTwitchIframe();
+        twitchEmbedCar.appendChild(twitchIframeCar);
+    }
+}
+
+function setLiveMode(isEnabled) {
+    document.body.classList.toggle('live-mode', isEnabled);
+
+    if (twitchLive) {
+        twitchLive.classList.toggle('active', isEnabled);
+        twitchLive.setAttribute('aria-hidden', isEnabled ? 'false' : 'true');
+    }
+
+    if (carModeLogo) {
+        carModeLogo.style.display = isEnabled ? 'none' : '';
+    }
+    if (twitchCar) {
+        twitchCar.classList.toggle('active', isEnabled && carMode && carMode.classList.contains('active'));
+        twitchCar.setAttribute('aria-hidden', (isEnabled && carMode && carMode.classList.contains('active')) ? 'false' : 'true');
+    }
+
+    if (isEnabled) ensureTwitchEmbeds();
+
+    try {
+        localStorage.setItem(TWITCH_LIVE_STORAGE_KEY, isEnabled ? '1' : '0');
+    } catch (e) {
+        // ignore storage errors
+    }
+}
+
+function getSavedLiveMode() {
+    try {
+        return localStorage.getItem(TWITCH_LIVE_STORAGE_KEY) === '1';
+    } catch (e) {
+        return false;
+    }
+}
+
+function toggleLiveMode() {
+    setLiveMode(!document.body.classList.contains('live-mode'));
+}
+
+// Secret triggers:
+// - Invisible button bottom-right
+// - Multi-click on header logo
+if (adminLiveToggle) adminLiveToggle.addEventListener('click', toggleLiveMode);
+
+let logoTapCount = 0;
+let logoTapTimer = null;
+if (headerLogo) {
+    headerLogo.addEventListener('click', () => {
+        logoTapCount += 1;
+        if (logoTapTimer) window.clearTimeout(logoTapTimer);
+        logoTapTimer = window.setTimeout(() => {
+            logoTapCount = 0;
+        }, 1200);
+        if (logoTapCount >= 7) {
+            logoTapCount = 0;
+            toggleLiveMode();
+        }
+    });
+}
 
 function getChannelMeta(index) {
     const card = channelCards[index];
@@ -103,6 +199,50 @@ function getChannelMeta(index) {
         imgSrc,
         frequency: frequency || 'Live Radio'
     };
+}
+
+function updateGlobalArtworkAndMediaSession() {
+    const meta = currentSoundIndex === -1 ? { title: 'RADIO AL', frequency: 'Live Radio', imgSrc: 'Radio.png' } : getChannelMeta(currentSoundIndex);
+
+    if (globalArtwork && meta.imgSrc) {
+        globalArtwork.setAttribute('src', meta.imgSrc);
+        globalArtwork.setAttribute('alt', meta.title);
+    }
+
+    if (carMode && carModeLogo && carModeBg) {
+        if (currentSoundIndex === -1) {
+            carModeLogo.setAttribute('src', 'Radio.png');
+            carModeBg.style.backgroundImage = 'url("Radio.png")';
+        }
+    }
+
+    if (!('mediaSession' in navigator)) return;
+    try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: meta.title,
+            artist: meta.frequency,
+            album: 'Radio AL',
+            artwork: meta.imgSrc
+                ? [
+                    { src: meta.imgSrc, sizes: '96x96', type: 'image/png' },
+                    { src: meta.imgSrc, sizes: '192x192', type: 'image/png' },
+                    { src: meta.imgSrc, sizes: '512x512', type: 'image/png' }
+                ]
+                : []
+        });
+    } catch (e) {
+        // ignore metadata errors
+    }
+}
+
+function setPlaybackStateForMediaSession() {
+    if (!('mediaSession' in navigator)) return;
+    try {
+        const playing = currentSoundIndex !== -1 && sounds[currentSoundIndex].playing();
+        navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
+    } catch (e) {
+        // ignore
+    }
 }
 
 function setPlayIconFor(buttonEl, isPlaying) {
@@ -118,9 +258,11 @@ function updateCarModeUI() {
     if (currentSoundIndex === -1) {
         carModeTitle.textContent = 'RADIOAL';
         carModeSubtitle.textContent = 'Zgjidhni një kanal';
-        carModeLogo.removeAttribute('src');
-        carModeBg.style.backgroundImage = 'none';
+        carModeLogo.setAttribute('src', 'Radio.png');
+        carModeBg.style.backgroundImage = 'url("Radio.png")';
         setPlayIconFor(carModePlay, false);
+        updateGlobalArtworkAndMediaSession();
+        setPlaybackStateForMediaSession();
         return;
     }
 
@@ -134,6 +276,8 @@ function updateCarModeUI() {
     }
 
     setPlayIconFor(carModePlay, sounds[currentSoundIndex].playing());
+    updateGlobalArtworkAndMediaSession();
+    setPlaybackStateForMediaSession();
 }
 
 function openCarMode() {
@@ -141,6 +285,12 @@ function openCarMode() {
     carMode.classList.add('active');
     carMode.setAttribute('aria-hidden', 'false');
     updateCarModeUI();
+    if (document.body.classList.contains('live-mode') && twitchCar) {
+        ensureTwitchEmbeds();
+        twitchCar.classList.add('active');
+        twitchCar.setAttribute('aria-hidden', 'false');
+        if (carModeLogo) carModeLogo.style.display = 'none';
+    }
     document.body.style.overflow = 'hidden';
 }
 
@@ -148,6 +298,11 @@ function closeCarMode() {
     if (!carMode) return;
     carMode.classList.remove('active');
     carMode.setAttribute('aria-hidden', 'true');
+    if (twitchCar) {
+        twitchCar.classList.remove('active');
+        twitchCar.setAttribute('aria-hidden', 'true');
+    }
+    if (carModeLogo) carModeLogo.style.display = '';
     document.body.style.overflow = '';
 }
 
@@ -168,6 +323,31 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && carMode && carMode.classList.contains('active')) closeCarMode();
 });
 
+// Restore Live Mode on refresh
+setLiveMode(getSavedLiveMode());
+updateGlobalArtworkAndMediaSession();
+setPlaybackStateForMediaSession();
+
+// iOS/Android lock-screen controls (Media Session)
+if ('mediaSession' in navigator) {
+    try {
+        navigator.mediaSession.setActionHandler('previoustrack', () => prevButton && prevButton.click());
+        navigator.mediaSession.setActionHandler('nexttrack', () => nextButton && nextButton.click());
+        navigator.mediaSession.setActionHandler('play', () => {
+            if (currentSoundIndex !== -1 && !sounds[currentSoundIndex].playing()) {
+                channelButtons[currentSoundIndex].click();
+            }
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            if (currentSoundIndex !== -1 && sounds[currentSoundIndex].playing()) {
+                channelButtons[currentSoundIndex].click();
+            }
+        });
+    } catch (e) {
+        // ignore
+    }
+}
+
 document.querySelectorAll('.audio-player').forEach((player, index) => {
 
     const playPauseButton = player.querySelector('.play-pause');
@@ -186,6 +366,8 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
             globalIcon.classList.remove('fa-pause');
             globalIcon.classList.add('fa-play');
             updateCarModeUI();
+            updateGlobalArtworkAndMediaSession();
+            setPlaybackStateForMediaSession();
 
         } else {
 
@@ -208,6 +390,8 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
             globalIcon.classList.remove('fa-play');
             globalIcon.classList.add('fa-pause');
             updateCarModeUI();
+            updateGlobalArtworkAndMediaSession();
+            setPlaybackStateForMediaSession();
         }
 
     };
@@ -224,28 +408,6 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
             sounds[index].volume(volumeControl.value);
         });
     }
-
-});
-
-// Butoni Scroll-to-Top
-window.addEventListener('scroll', function() {
-
-    const scrollToTopButton = document.getElementById('scrollToTop');
-
-    if (window.scrollY > 300) {
-        scrollToTopButton.style.display = 'block';
-    } else {
-        scrollToTopButton.style.display = 'none';
-    }
-
-});
-
-document.getElementById('scrollToTop').addEventListener('click', function() {
-
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
 
 });
 
