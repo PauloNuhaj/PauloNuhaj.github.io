@@ -39,6 +39,95 @@ const globalIcon = globalPlayPauseButton.querySelector('i');
 const channelButtons = document.querySelectorAll('.play-pause');
 const nowPlayingLabel = document.getElementById('current-channel');
 
+// Car Mode elements
+const carModeToggle = document.getElementById('car-mode-toggle');
+const carMode = document.getElementById('car-mode');
+const carModeBack = document.getElementById('car-mode-back');
+const carModePrev = document.getElementById('car-mode-prev');
+const carModePlay = document.getElementById('car-mode-play');
+const carModeNext = document.getElementById('car-mode-next');
+const carModeTitle = document.getElementById('car-mode-title');
+const carModeSubtitle = document.getElementById('car-mode-subtitle');
+const carModeLogo = document.getElementById('car-mode-logo');
+const carModeBg = document.getElementById('car-mode-bg');
+
+const channelCards = Array.from(document.querySelectorAll('.channel'));
+
+function getChannelMeta(index) {
+    const card = channelCards[index];
+    const title = card ? (card.querySelector('h3')?.textContent || 'RADIOAL') : 'RADIOAL';
+    const imgSrc = card ? (card.querySelector('img')?.getAttribute('src') || '') : '';
+    const frequency = card ? (card.getAttribute('data-frequency') || '') : '';
+    return {
+        title,
+        imgSrc,
+        frequency: frequency || 'Live Radio'
+    };
+}
+
+function setPlayIconFor(buttonEl, isPlaying) {
+    const icon = buttonEl ? buttonEl.querySelector('i') : null;
+    if (!icon) return;
+    icon.classList.toggle('fa-play', !isPlaying);
+    icon.classList.toggle('fa-pause', isPlaying);
+}
+
+function updateCarModeUI() {
+    if (!carMode || !carModeTitle || !carModeSubtitle || !carModeLogo || !carModeBg) return;
+
+    if (currentSoundIndex === -1) {
+        carModeTitle.textContent = 'RADIOAL';
+        carModeSubtitle.textContent = 'Zgjidhni një kanal';
+        carModeLogo.removeAttribute('src');
+        carModeBg.style.backgroundImage = 'none';
+        setPlayIconFor(carModePlay, false);
+        return;
+    }
+
+    const meta = getChannelMeta(currentSoundIndex);
+    carModeTitle.textContent = meta.title.toUpperCase();
+    carModeSubtitle.textContent = meta.frequency;
+
+    if (meta.imgSrc) {
+        carModeLogo.setAttribute('src', meta.imgSrc);
+        carModeBg.style.backgroundImage = `url("${meta.imgSrc}")`;
+    }
+
+    setPlayIconFor(carModePlay, sounds[currentSoundIndex].playing());
+}
+
+function openCarMode() {
+    if (!carMode) return;
+    carMode.classList.add('active');
+    carMode.setAttribute('aria-hidden', 'false');
+    updateCarModeUI();
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCarMode() {
+    if (!carMode) return;
+    carMode.classList.remove('active');
+    carMode.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+
+if (carModeToggle) carModeToggle.addEventListener('click', openCarMode);
+if (carModeBack) carModeBack.addEventListener('click', closeCarMode);
+
+if (carModePrev) carModePrev.addEventListener('click', () => prevButton.click());
+if (carModeNext) carModeNext.addEventListener('click', () => nextButton.click());
+if (carModePlay) carModePlay.addEventListener('click', () => globalPlayPauseButton.click());
+
+if (carMode) {
+    carMode.addEventListener('click', (e) => {
+        if (e.target === carMode) closeCarMode();
+    });
+}
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && carMode && carMode.classList.contains('active')) closeCarMode();
+});
+
 document.querySelectorAll('.audio-player').forEach((player, index) => {
 
     const playPauseButton = player.querySelector('.play-pause');
@@ -56,6 +145,7 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
 
             globalIcon.classList.remove('fa-pause');
             globalIcon.classList.add('fa-play');
+            updateCarModeUI();
 
         } else {
 
@@ -77,6 +167,7 @@ document.querySelectorAll('.audio-player').forEach((player, index) => {
 
             globalIcon.classList.remove('fa-play');
             globalIcon.classList.add('fa-pause');
+            updateCarModeUI();
         }
 
     };
@@ -157,4 +248,11 @@ globalPlayPauseButton.addEventListener('click', () => {
 
     }
 
+});
+
+// Keep Car Mode UI in sync if audio ends/errors
+sounds.forEach((s) => {
+    s.on('end', updateCarModeUI);
+    s.on('pause', updateCarModeUI);
+    s.on('play', updateCarModeUI);
 });

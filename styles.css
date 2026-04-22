@@ -24,6 +24,213 @@ header .logo img {
     height: 50px;
 }
 
+.car-mode-toggle {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    margin-left: 12px;
+}
+
+.car-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* Car Mode (Android Auto style) */
+.car-mode {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 3000;
+    background: #000;
+}
+
+.car-mode.active {
+    display: flex;
+}
+
+.car-mode-left,
+.car-mode-right {
+    height: 100%;
+}
+
+.car-mode-left {
+    position: relative;
+    width: 42%;
+    overflow: hidden;
+    background: #111;
+}
+
+.car-mode-left-bg {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-size: cover;
+    transform: scale(1.2);
+    filter: blur(18px) brightness(0.7);
+}
+
+.car-mode-left::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,0.10), rgba(0,0,0,0.55));
+}
+
+.car-mode-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(40vh, 260px);
+    height: min(40vh, 260px);
+    object-fit: cover;
+    border-radius: 26px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.car-mode-right {
+    width: 58%;
+    background: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 42px;
+}
+
+.car-mode-top {
+    position: absolute;
+    top: 22px;
+    left: calc(42% + 20px);
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.car-mode-icon {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    padding: 10px 12px;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.car-mode-icon:hover {
+    opacity: 1;
+}
+
+.car-mode-live {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.95;
+}
+
+.car-mode-live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff2d2d;
+    box-shadow: 0 0 0 rgba(255, 45, 45, 0.55);
+    animation: livePulse 1.2s ease-in-out infinite;
+}
+
+.car-mode-live-text {
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    font-size: 12px;
+    color: #ff2d2d;
+}
+
+@keyframes livePulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 45, 45, 0.55); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 45, 45, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 45, 45, 0); }
+}
+
+.car-mode-meta {
+    max-width: 92%;
+}
+
+.car-mode-title {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.car-mode-subtitle {
+    margin-top: 10px;
+    font-size: clamp(16px, 2vw, 22px);
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.car-mode-controls {
+    margin-top: 46px;
+    display: flex;
+    align-items: center;
+    gap: 34px;
+}
+
+.car-mode-skip {
+    width: 78px;
+    height: 78px;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.car-mode-skip:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.car-mode-play {
+    width: 104px;
+    height: 104px;
+    border-radius: 999px;
+    border: none;
+    background: #fff;
+    color: #000;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+.car-mode-play:hover {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+/* Keep it usable on phones/tablets in-car */
+@media (max-width: 900px) {
+    .car-mode-left { width: 46%; }
+    .car-mode-right { width: 54%; padding: 26px 22px; }
+    .car-mode-top { left: calc(46% + 14px); }
+    .car-mode-controls { gap: 22px; }
+    .car-mode-skip { width: 64px; height: 64px; font-size: 20px; }
+    .car-mode-play { width: 88px; height: 88px; font-size: 32px; }
+}
+
+@media (orientation: portrait) {
+    .car-mode {
+        flex-direction: column;
+    }
+    .car-mode-left { width: 100%; height: 42%; }
+    .car-mode-right { width: 100%; height: 58%; }
+    .car-mode-top { left: 20px; }
+}
+
 /* Stilizimi i hamburger menu */
 .hamburger {
     display: none; /* Fshihet në desktop */
