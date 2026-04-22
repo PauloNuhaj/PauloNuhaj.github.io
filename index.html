@@ -23,6 +23,9 @@
         <div class="logo">
             <img src="Radio.png" alt="Radio AL Logo">
         </div>
+        <button id="car-mode-toggle" class="car-mode-toggle" title="Car Mode" aria-label="Car Mode">
+            <i class="fas fa-car-side"></i>
+        </button>
         <button class="hamburger" aria-label="Open menu">
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
@@ -178,6 +181,48 @@
     </footer>
 
     <button id="scrollToTop" title="Kthehu në fillim"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Car Mode Overlay -->
+    <div id="car-mode" class="car-mode" aria-hidden="true">
+        <div class="car-mode-left">
+            <div class="car-mode-left-bg" id="car-mode-bg"></div>
+            <img id="car-mode-logo" class="car-mode-logo" alt="Radio logo">
+        </div>
+        <div class="car-mode-right">
+            <div class="car-mode-top">
+                <button class="car-mode-icon" id="car-mode-back" aria-label="Back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button class="car-mode-icon" id="car-mode-menu" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="car-mode-live" aria-label="Live">
+                    <span class="car-mode-live-dot"></span>
+                    <span class="car-mode-live-text">LIVE</span>
+                </div>
+                <button class="car-mode-icon" id="car-mode-more" aria-label="More">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+
+            <div class="car-mode-meta">
+                <div id="car-mode-title" class="car-mode-title">RADIOAL</div>
+                <div id="car-mode-subtitle" class="car-mode-subtitle">Live Radio</div>
+            </div>
+
+            <div class="car-mode-controls">
+                <button class="car-mode-skip" id="car-mode-prev" aria-label="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="car-mode-play" id="car-mode-play" aria-label="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="car-mode-skip" id="car-mode-next" aria-label="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
