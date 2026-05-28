@@ -3,14 +3,54 @@ body {
     margin: 0;
     padding: 0;
     padding-bottom: 40px;
-    background-color: #f4f4f4;
+    background-color: #1a2332;
+    background-image: url('dj-background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: #333;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 18, 32, 0.25) 0%,
+        rgba(10, 18, 32, 0.35) 50%,
+        rgba(10, 18, 32, 0.45) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+body > *:not(.loader):not(.car-mode):not(#audio-player):not(.admin-live-toggle) {
+    position: relative;
+    z-index: 1;
+}
+
+#audio-player,
+.car-mode,
+.loader,
+.admin-live-toggle {
+    z-index: 1000;
 }
 
 /* Dark mode (normal UI only) */
 body.dark {
-    background-color: #0b0f16;
     color: #e8eefc;
+}
+
+body.dark::before {
+    background: linear-gradient(
+        180deg,
+        rgba(5, 10, 20, 0.35) 0%,
+        rgba(5, 10, 20, 0.5) 50%,
+        rgba(5, 10, 20, 0.6) 100%
+    );
 }
 
 body.dark header {
@@ -23,16 +63,16 @@ body.dark .nav-menu {
 }
 
 body.dark .channels {
-    background-color: #0b0f16;
+    background-color: rgba(15, 23, 42, 0.35);
 }
 
 body.dark .channel,
 body.dark .about,
 body.dark .programs,
 body.dark .contact {
-    background-color: #0f172a;
+    background-color: rgba(15, 23, 42, 0.42);
     color: #e8eefc;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
 body.dark .channel p,
@@ -46,10 +86,6 @@ body.dark .about h2,
 body.dark .programs h2,
 body.dark .contact h2 {
     color: #e8eefc;
-}
-
-body.dark footer {
-    background-color: #0f172a;
 }
 
 body.dark #audio-player {
@@ -460,8 +496,10 @@ nav ul li a:hover {
 .hero {
     text-align: center;
     padding: 150px 20px;
-    background: linear-gradient(135deg, #0073e6, #00c6ff);
+    background: linear-gradient(135deg, rgba(0, 115, 230, 0.22), rgba(0, 198, 255, 0.18));
     color: #fff;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 body.live-mode .hero {
@@ -488,7 +526,9 @@ body.live-mode #hero-content {
 .channels {
     padding: 80px 20px;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: rgba(255, 255, 255, 0.28);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 .channels h2 {
@@ -505,12 +545,15 @@ body.live-mode #hero-content {
 }
 
 .channel {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     padding: 20px;
     width: 300px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 .channel:hover {
@@ -570,12 +613,15 @@ body.live-mode #hero-content {
 .about, .programs, .contact {
     padding: 80px 20px;
     text-align: center;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     margin: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: slideIn 1s ease-out;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 .about:hover, .programs:hover, .contact:hover {
@@ -584,11 +630,17 @@ body.live-mode #hero-content {
 }
 
 footer {
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.45);
     color: #fff;
     text-align: center;
     padding: 20px;
     margin-top: 50px;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+body.dark footer {
+    background-color: rgba(15, 23, 42, 0.45);
 }
 
 .social-icons {
@@ -707,6 +759,10 @@ footer {
 }
 /* Mobile layout për radio kanalet dhe player-in */
 @media (max-width: 768px) {
+
+    body {
+        background-attachment: scroll;
+    }
 
     .channel-list {
         display: grid;
