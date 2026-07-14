@@ -10,7 +10,9 @@
     <link rel="apple-touch-icon" href="icon-192x192.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
 </head>
@@ -22,18 +24,21 @@
     <header>
         <div class="logo">
             <img src="Radio.png" alt="Radio AL Logo">
+            <span class="logo-tag">On Air</span>
         </div>
-        <button id="car-mode-toggle" class="car-mode-toggle" title="Car Mode" aria-label="Car Mode">
-            <i class="fas fa-car-side"></i>
-        </button>
-        <button id="dark-mode-toggle" class="dark-mode-toggle" title="Dark Mode" aria-label="Dark Mode">
-            <i class="fas fa-moon"></i>
-        </button>
-        <button class="hamburger" aria-label="Open menu">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-        </button>
+        <div class="header-controls">
+            <button id="car-mode-toggle" class="car-mode-toggle" title="Car Mode" aria-label="Car Mode">
+                <i class="fas fa-car-side"></i>
+            </button>
+            <button id="dark-mode-toggle" class="dark-mode-toggle" title="Dark Mode" aria-label="Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="hamburger" aria-label="Open menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
         <nav class="nav-menu">
             <ul>
                 <li><a href="#home">Kryefaqja</a></li>
@@ -46,8 +51,15 @@
 
     <section id="home" class="hero">
         <div id="hero-content">
+            <span class="eyebrow">9 Kanale &middot; Live</span>
             <h1>Mirë se vini në Radio AL</h1>
             <p>Radioja juaj e preferuar!</p>
+            <div class="tuner-strip" aria-hidden="true">
+                <div class="tuner-scale"></div>
+                <div class="tuner-labels">
+                    <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
+                </div>
+            </div>
         </div>
 
         <!-- Twitch Live (hidden by default; enabled via admin trigger) -->
@@ -59,87 +71,134 @@
     </section>
 
     <section id="channels" class="channels">
+        <span class="section-kicker">Presets 01&ndash;09</span>
         <h2>Kanalet tona</h2>
+        <p class="section-sub">Zgjidh një kanal dhe luaje direkt në shfletues.</p>
         <div class="channel-list">
-            <div class="channel">
+            <div class="channel" data-frequency="Muzikë &amp; Informacion">
+                <div class="channel-top">
+                    <span class="preset-num">01</span>
+                    <span class="channel-tag">Muzikë &amp; Informacion</span>
+                </div>
                 <img src="radio one.jpeg" alt="Kanal 1">
                 <h3>Radio One 94</h3>
                 <p>Radio One 94 - Muzikë dhe informacion.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Muzikë &amp; Lajme">
+                <div class="channel-top">
+                    <span class="preset-num">02</span>
+                    <span class="channel-tag">Muzikë &amp; Lajme</span>
+                </div>
                 <img src="Klan kosova.png" alt="Klan Kosova">
                 <h3>Klan Kosova</h3>
                 <p>Klan Kosova - Muzikë dhe lajme.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Muzikë &amp; Argëtim">
+                <div class="channel-top">
+                    <span class="preset-num">03</span>
+                    <span class="channel-tag">Muzikë &amp; Argëtim</span>
+                </div>
                 <img src="clubfm.png" alt="Club FM">
                 <h3>Club FM</h3>
                 <p>Club FM - Muzikë dhe argëtim.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Hite Live">
+                <div class="channel-top">
+                    <span class="preset-num">04</span>
+                    <span class="channel-tag">Hite Live</span>
+                </div>
                 <img src="topalbania.png" alt="Top Albania">
                 <h3>Top Albania</h3>
                 <p>Top Albania - Muzikën më e mirë.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Klasikë">
+                <div class="channel-top">
+                    <span class="preset-num">05</span>
+                    <span class="channel-tag">Klasikë</span>
+                </div>
                 <img src="top-gold-radio.png" alt="Top Gold Radio">
                 <h3>Top Gold Radio</h3>
                 <p>Top Gold Radio - Klasikët më të mirë.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
             <!-- Kanale të reja -->
-            <div class="channel">
+            <div class="channel" data-frequency="Për Ty">
+                <div class="channel-top">
+                    <span class="preset-num">06</span>
+                    <span class="channel-tag">Për Ty</span>
+                </div>
                 <img src="my-music.png" alt="My Music">
                 <h3>My Music</h3>
                 <p>My Music - Muzikën më e mirë për ju.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Udhëtim">
+                <div class="channel-top">
+                    <span class="preset-num">07</span>
+                    <span class="channel-tag">Udhëtim</span>
+                </div>
                 <img src="travel.jpg" alt="Radio Travel">
                 <h3>Radio Travel</h3>
                 <p>Radio Travel - Muzikë udhëtimi dhe aventurë.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Chill">
+                <div class="channel-top">
+                    <span class="preset-num">08</span>
+                    <span class="channel-tag">Chill</span>
+                </div>
                 <img src="chill.jpg" alt="Chill Radio">
                 <h3>Chill Radio</h3>
                 <p>Chill Radio - Muzikë relaksuese për çdo kohë.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
-            <div class="channel">
+            <div class="channel" data-frequency="Dashuri">
+                <div class="channel-top">
+                    <span class="preset-num">09</span>
+                    <span class="channel-tag">Dashuri</span>
+                </div>
                 <img src="love.webp" alt="Love Radio">
                 <h3>Love Radio</h3>
                 <p>Love Radio - Muzikë dashurie dhe emocioni.</p>
                 <div class="audio-player">
                     <button class="play-pause">Play</button>
+                    <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
                     <input type="range" class="volume" min="0" max="1" step="0.1" value="1">
                 </div>
             </div>
@@ -148,17 +207,19 @@
         
     </section>
 
-  <section><div id="audio-player">
+  <div id="audio-player">
     <img id="current-channel-artwork" class="current-channel-artwork" src="Radio.png" alt="Radio artwork">
     <button id="prev" title="Kanal i mëparshëm"><i class="fas fa-backward"></i></button>
     <button id="play-pause" title="Luaj/Pauzë"><i class="fas fa-play"></i></button>
     <button id="next" title="Kanal tjetër"><i class="fas fa-forward"></i></button>
     <div class="now-playing">
+        <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
         <span id="current-channel">Zgjidhni një kanal</span>
     </div>
-</section>
+  </div>
 
     <section id="about" class="about">
+        <span class="section-kicker">Kush jemi</span>
         <h2>Rreth Nesh</h2>
         <p>Radio AL është një radio e dedikuar për muzikën dhe informacionin më të mirë.
             Ketu mund te gjeni te gjitha kanalet tuaj te preferuar te radios te gjitha ne nje vend. mund te degjoni emisjone nga me te ndryshmet
@@ -167,6 +228,7 @@
     </section>
 
     <section id="programs" class="programs">
+        <span class="section-kicker">Orari</span>
         <h2>Programet</h2>
         <ul>
             <li>Muzikë e Mirë - 08:00 - 10:00</li>
