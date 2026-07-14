@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rreth Nesh — Radio AL</title>
+    <meta name="description" content="Historia e Radio AL — radioja juaj e preferuar, me muzikë dhe informacion.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="about.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="about-page">
+    <div class="about-ambient" aria-hidden="true">
+        <span class="about-wave about-wave-1"></span>
+        <span class="about-wave about-wave-2"></span>
+        <span class="about-wave about-wave-3"></span>
+    </div>
+
+    <header>
+        <a class="logo" href="index.html">
+            <img src="Radio.png" alt="Radio AL Logo">
+            <span class="logo-tag">On Air</span>
+        </a>
+        <div class="header-controls">
+            <button id="dark-mode-toggle" class="dark-mode-toggle" title="Dark Mode" aria-label="Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+    <div id="nav-backdrop" class="nav-backdrop" hidden></div>
+    <nav class="nav-menu" id="nav-menu" aria-hidden="true">
+        <ul>
+            <li><a href="index.html">Kryefaqja</a></li>
+            <li><a href="about.html" aria-current="page">Rreth Nesh</a></li>
+            <li><a href="programs.html">Programet</a></li>
+            <li><a href="index.html#contact">Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <main class="about-main">
+        <section class="about-hero">
+            <p class="about-kicker">Est. frekuenca e preferuar</p>
+            <h1>Rreth Nesh</h1>
+            <p class="about-lead">Ku zëri i vjetër takon radiojtjen e re — të gjitha kanalet e tua, në një vend.</p>
+        </section>
+
+        <section class="about-showcase">
+            <div class="vintage-radio" id="vintage-radio">
+                <p class="vr-hint">Provo të rrotullosh knobtë ↺</p>
+                <div class="vr-antenna"></div>
+                <div class="vr-body">
+                    <div class="vr-grille">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="vr-panel">
+                        <div class="vr-freq-readout" aria-live="polite">
+                            <span class="vr-freq-label">FM</span>
+                            <span id="vr-freq-value" class="vr-freq-value">96.3</span>
+                            <span class="vr-freq-unit">MHz</span>
+                        </div>
+                        <div class="vr-dial">
+                            <div class="vr-scale">
+                                <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
+                            </div>
+                            <div class="vr-needle" id="vr-needle"></div>
+                            <div class="vr-glow"></div>
+                        </div>
+                        <div class="vr-meters">
+                            <div class="vr-meter"><i></i></div>
+                            <div class="vr-meter"><i></i></div>
+                            <div class="vr-meter"><i></i></div>
+                        </div>
+                        <div class="vr-knobs">
+                            <button type="button" class="vr-knob" id="vr-knob-tune" aria-label="Tune frequency" style="--rot: 40deg"></button>
+                            <button type="button" class="vr-knob vr-knob-gold" id="vr-knob-fx" aria-label="Effects" style="--rot: -20deg"></button>
+                        </div>
+                        <div class="vr-badge" id="vr-badge">RADIO AL · FM</div>
+                    </div>
+                </div>
+                <div class="vr-shadow"></div>
+                <p id="vr-station-hint" class="vr-station-hint">Tune the dial…</p>
+            </div>
+
+            <article class="about-story">
+                <h2>Historia në valë</h2>
+                <p>
+                    Radio AL lindi nga dëshira e thjeshtë: të mbledhim kanalet më të mira të radios
+                    shqiptare e rajonale në një vend — pa ndërruar app, pa humbur frekuencën.
+                </p>
+                <p>
+                    Nga mëngjesi me lajme deri te nata me muzikë që të qetëson udhëtimin,
+                    ne jemi këtu që dita jote të tingëllojë pak më bukur.
+                </p>
+                <ul class="about-points">
+                    <li>
+                        <span class="about-point-num">01</span>
+                        <div>
+                            <strong>9 kanale live</strong>
+                            <span>Muzikë, lajme dhe atmosferë — gjithmonë on air.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="about-point-num">02</span>
+                        <div>
+                            <strong>Për makinë &amp; telefon</strong>
+                            <span>Car Mode dhe player si Spotify — dëgjo kudo, lehtë.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="about-point-num">03</span>
+                        <div>
+                            <strong>Komunitet</strong>
+                            <span>Livestream çdo të enjte — Kalceto te Xon Kulla, 19:00–20:00.</span>
+                        </div>
+                    </li>
+                </ul>
+                <a class="about-cta" href="index.html#channels">
+                    <i class="fas fa-broadcast-tower"></i>
+                    Kthehu te kanalet
+                </a>
+            </article>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <p class="footer-contact">
+            Kontakt: <a href="mailto:contact@radioal.com">contact@radioal.com</a>
+        </p>
+        <p>&copy; 2023 Radio AL. Të gjitha të drejtat e rezervuara.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <script src="about.js"></script>
+</body>
+</html>

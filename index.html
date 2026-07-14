@@ -7,7 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Radio AL">
+    <meta name="theme-color" content="#0f172a">
     <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,33 +29,53 @@
             <span class="logo-tag">On Air</span>
         </div>
         <div class="header-controls">
+            <button id="alarm-toggle" class="alarm-toggle" title="Alarm zgjimi" aria-label="Alarm zgjimi">
+                <i class="fas fa-bell"></i>
+            </button>
             <button id="car-mode-toggle" class="car-mode-toggle" title="Car Mode" aria-label="Car Mode">
                 <i class="fas fa-car-side"></i>
             </button>
             <button id="dark-mode-toggle" class="dark-mode-toggle" title="Dark Mode" aria-label="Dark Mode">
                 <i class="fas fa-moon"></i>
             </button>
-            <button class="hamburger" aria-label="Open menu">
+            <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
                 <span class="hamburger-line"></span>
             </button>
         </div>
-        <nav class="nav-menu">
-            <ul>
-                <li><a href="#home">Kryefaqja</a></li>
-                <li><a href="#about">Rreth Nesh</a></li>
-                <li><a href="#programs">Programet</a></li>
-                <li><a href="#contact">Kontakt</a></li>
-            </ul>
-        </nav>
     </header>
+    <div id="nav-backdrop" class="nav-backdrop" hidden></div>
+    <nav class="nav-menu" id="nav-menu" aria-hidden="true">
+        <ul>
+            <li><a href="#home">Kryefaqja</a></li>
+            <li><a href="about.html">Rreth Nesh</a></li>
+            <li><a href="programs.html">Programet</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+        </ul>
+    </nav>
 
     <section id="home" class="hero">
         <div id="hero-content">
             <span class="eyebrow">9 Kanale &middot; Live</span>
-            <h1>Mirë se vini në Radio AL</h1>
-            <p>Radioja juaj e preferuar!</p>
+            <h1 id="hero-greeting">Mirë se vini në Radio AL</h1>
+            <p id="hero-sub">Radioja juaj e preferuar!</p>
+            <div class="hero-listen" id="hero-listen" aria-live="polite">
+                <i class="fas fa-headphones-alt" aria-hidden="true"></i>
+                <span id="hero-listen-text">Sot ke dëgjuar 0 min</span>
+            </div>
+            <button type="button" class="hero-suggest" id="hero-suggest">
+                <span class="hero-suggest-kicker" id="hero-suggest-kicker">Për këtë orë</span>
+                <span class="hero-suggest-row">
+                    <img id="hero-suggest-art" class="hero-suggest-art" src="Radio.png" alt="">
+                    <span id="hero-suggest-name" class="hero-suggest-name">Chill Radio</span>
+                    <i class="fas fa-play" aria-hidden="true"></i>
+                </span>
+            </button>
+            <button type="button" class="hero-name-edit" id="hero-name-edit" title="Ndrysho emrin">
+                <i class="fas fa-pen" aria-hidden="true"></i>
+                Ndrysho emrin
+            </button>
             <div class="tuner-strip" aria-hidden="true">
                 <div class="tuner-scale"></div>
                 <div class="tuner-labels">
@@ -80,7 +102,7 @@
                     <span class="preset-num">01</span>
                     <span class="channel-tag">Muzikë &amp; Informacion</span>
                 </div>
-                <img src="radio one.jpeg" alt="Kanal 1">
+                <img src="radio-one.jpeg" alt="Kanal 1">
                 <h3>Radio One 94</h3>
                 <p>Radio One 94 - Muzikë dhe informacion.</p>
                 <div class="audio-player">
@@ -94,7 +116,7 @@
                     <span class="preset-num">02</span>
                     <span class="channel-tag">Muzikë &amp; Lajme</span>
                 </div>
-                <img src="Klan kosova.png" alt="Klan Kosova">
+                <img src="klan-kosova.png" alt="Klan Kosova">
                 <h3>Klan Kosova</h3>
                 <p>Klan Kosova - Muzikë dhe lajme.</p>
                 <div class="audio-player">
@@ -207,43 +229,189 @@
         
     </section>
 
-  <div id="audio-player">
-    <img id="current-channel-artwork" class="current-channel-artwork" src="Radio.png" alt="Radio artwork">
-    <button id="prev" title="Kanal i mëparshëm"><i class="fas fa-backward"></i></button>
-    <button id="play-pause" title="Luaj/Pauzë"><i class="fas fa-play"></i></button>
-    <button id="next" title="Kanal tjetër"><i class="fas fa-forward"></i></button>
-    <div class="now-playing">
-        <span class="eq" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span id="current-channel">Zgjidhni një kanal</span>
+  <!-- Spotify-style mini player -->
+  <div id="audio-player" class="spotify-bar" role="region" aria-label="Player">
+    <div class="spotify-bar-live" aria-hidden="true"></div>
+    <button type="button" class="spotify-bar-info" id="spotify-bar-expand" aria-label="Hap Now Playing">
+      <img id="current-channel-artwork" class="current-channel-artwork" src="Radio.png" alt="Radio artwork">
+      <div class="spotify-bar-meta">
+        <span id="current-channel" class="spotify-bar-title">Zgjidhni një kanal</span>
+        <span id="current-channel-sub" class="spotify-bar-sub">Radio AL</span>
+      </div>
+    </button>
+    <div class="spotify-bar-controls">
+      <button id="prev" title="Kanal i mëparshëm" aria-label="Previous"><i class="fas fa-step-backward"></i></button>
+      <button id="play-pause" title="Luaj/Pauzë" aria-label="Play/Pause"><i class="fas fa-play"></i></button>
+      <button id="next" title="Kanal tjetër" aria-label="Next"><i class="fas fa-step-forward"></i></button>
     </div>
   </div>
 
-    <section id="about" class="about">
-        <span class="section-kicker">Kush jemi</span>
-        <h2>Rreth Nesh</h2>
-        <p>Radio AL është një radio e dedikuar për muzikën dhe informacionin më të mirë.
-            Ketu mund te gjeni te gjitha kanalet tuaj te preferuar te radios te gjitha ne nje vend. mund te degjoni emisjone nga me te ndryshmet
-             duke e bere diten tuaj me te bukur.
+  <!-- Expanded Now Playing (Spotify-style fullscreen) -->
+  <div id="spotify-now" class="spotify-now" aria-hidden="true">
+    <div class="spotify-now-bg" id="spotify-now-bg"></div>
+    <div class="spotify-now-veil"></div>
+    <div class="spotify-now-inner">
+      <div class="spotify-now-top">
+        <button type="button" id="spotify-now-close" class="spotify-now-icon" aria-label="Mbylle">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="spotify-now-heading">
+          <span class="spotify-now-playing-from">PLAYING FROM RADIO</span>
+          <span id="spotify-now-station" class="spotify-now-station">RADIO AL</span>
+        </div>
+        <button type="button" id="spotify-now-car" class="spotify-now-icon" aria-label="Car Mode" title="Car Mode">
+          <i class="fas fa-car-side"></i>
+        </button>
+      </div>
+
+      <div class="spotify-now-art-wrap">
+        <img id="spotify-now-art" class="spotify-now-art" src="Radio.png" alt="Channel artwork">
+      </div>
+
+      <div class="spotify-now-meta">
+        <div id="spotify-now-title" class="spotify-now-title">RADIO AL</div>
+        <div id="spotify-now-sub" class="spotify-now-sub">Live Radio</div>
+      </div>
+
+      <div class="spotify-now-progress" aria-label="Live">
+        <div class="spotify-now-progress-track">
+          <div class="spotify-now-progress-fill"></div>
+        </div>
+        <div class="spotify-now-progress-labels">
+          <span class="spotify-live-pill"><span class="spotify-live-dot"></span> LIVE</span>
+          <span>24/7</span>
+        </div>
+      </div>
+
+      <div class="spotify-now-controls">
+        <button type="button" id="spotify-now-prev" class="spotify-now-skip" aria-label="Previous">
+          <i class="fas fa-step-backward"></i>
+        </button>
+        <button type="button" id="spotify-now-play" class="spotify-now-play" aria-label="Play/Pause">
+          <i class="fas fa-play"></i>
+        </button>
+        <button type="button" id="spotify-now-next" class="spotify-now-skip" aria-label="Next">
+          <i class="fas fa-step-forward"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Station intro (channel change jingle) -->
+    <div id="station-intro" class="station-intro" aria-hidden="true">
+        <div class="station-intro-glow"></div>
+        <div class="station-intro-dial" aria-hidden="true"></div>
+        <div class="station-intro-card">
+            <img id="station-intro-art" class="station-intro-art" src="Radio.png" alt="">
+            <span class="station-intro-label">On air</span>
+            <span id="station-intro-title" class="station-intro-title">RADIO AL</span>
+            <span id="station-intro-freq" class="station-intro-freq">Live Radio</span>
+        </div>
+    </div>
+
+    <!-- Nickname / personal hello -->
+    <div id="nickname-modal" class="nickname-modal" aria-hidden="true">
+        <div class="nickname-modal-card" role="dialog" aria-labelledby="nickname-title">
+            <p class="nickname-kicker">Personalizo</p>
+            <h2 id="nickname-title">Si të thërras?</h2>
+            <p class="nickname-sub">Do ta përdorim për përshëndetjen — mbetet vetëm në këtë pajisje.</p>
+            <label class="nickname-field">
+                <span>Emri ose nickname</span>
+                <input type="text" id="nickname-input" maxlength="20" autocomplete="nickname" placeholder="p.sh. Paulo">
+            </label>
+            <div class="nickname-actions">
+                <button type="button" id="nickname-skip" class="nickname-skip">Më vonë</button>
+                <button type="button" id="nickname-save" class="nickname-save">
+                    <i class="fas fa-check" aria-hidden="true"></i>
+                    Ruaj
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wake-up alarm modal -->
+    <div id="alarm-modal" class="alarm-modal" aria-hidden="true">
+        <div class="alarm-modal-card" role="dialog" aria-labelledby="alarm-title">
+            <button type="button" id="alarm-close" class="alarm-close" aria-label="Mbyll">
+                <i class="fas fa-times"></i>
+            </button>
+            <p class="alarm-kicker">Wake-up</p>
+            <h2 id="alarm-title">Më zgjo me radio</h2>
+            <p class="alarm-sub">Zgjidh orën dhe kanalin. Mbaji faqen/PWA hapur natën që alarmi të jetë i besueshëm.</p>
+
+            <div class="alarm-field">
+                <span>Ora</span>
+                <input type="hidden" id="alarm-time" value="07:30">
+                <div class="alarm-wheel" role="group" aria-label="Zgjidh orën">
+                    <div class="alarm-wheel-fade alarm-wheel-fade-top" aria-hidden="true"></div>
+                    <div class="alarm-wheel-fade alarm-wheel-fade-bottom" aria-hidden="true"></div>
+                    <div class="alarm-wheel-highlight" aria-hidden="true"></div>
+                    <div class="alarm-wheel-cols">
+                        <div class="alarm-wheel-col" id="alarm-hour-wheel" tabindex="0" role="listbox" aria-label="Ora"></div>
+                        <span class="alarm-wheel-sep" aria-hidden="true">:</span>
+                        <div class="alarm-wheel-col" id="alarm-minute-wheel" tabindex="0" role="listbox" aria-label="Minutat"></div>
+                    </div>
+                </div>
+                <p class="alarm-wheel-hint">Rrëshqit lart/poshtë si në iPhone</p>
+            </div>
+
+            <div class="alarm-field">
+                <span>Kanali</span>
+                <input type="hidden" id="alarm-channel" value="0">
+                <div class="alarm-channel-picker" id="alarm-channel-picker" role="listbox" aria-label="Zgjidh kanalin"></div>
+            </div>
+
+            <label class="alarm-switch">
+                <input type="checkbox" id="alarm-enabled">
+                <span>Alarmi aktiv</span>
+            </label>
+
+            <p id="alarm-status" class="alarm-status">Alarmi është fikur.</p>
+
+            <div class="alarm-actions">
+                <button type="button" id="alarm-save" class="alarm-save">
+                    <i class="fas fa-check"></i>
+                    Ruaj alarmi
+                </button>
+                <button type="button" id="alarm-test" class="alarm-test">Testo tani</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="alarm-toast" class="alarm-toast" hidden>
+        <i class="fas fa-sun"></i>
+        <div>
+            <strong>Mirëmëngjes!</strong>
+            <span id="alarm-toast-text">Po fillon radioja jote.</span>
+        </div>
+    </div>
+
+    <!-- PWA install prompt -->
+    <div id="pwa-install" class="pwa-install" hidden>
+        <div class="pwa-install-inner">
+            <img src="icon-192x192.png" alt="" class="pwa-install-icon" width="40" height="40">
+            <div class="pwa-install-text">
+                <strong>Radio AL në telefon</strong>
+                <span id="pwa-install-hint">Instaloje për hapje të shpejtë, si app.</span>
+            </div>
+            <button type="button" id="pwa-install-btn" class="pwa-install-btn">
+                <i class="fas fa-download"></i>
+                Instalo aplikacionin
+            </button>
+            <button type="button" id="pwa-install-dismiss" class="pwa-install-dismiss" aria-label="Mbyll">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <p class="footer-contact">
+            Kontakt: <a href="mailto:contact@radioal.com">contact@radioal.com</a>
         </p>
-    </section>
-
-    <section id="programs" class="programs">
-        <span class="section-kicker">Orari</span>
-        <h2>Programet</h2>
-        <ul>
-            <li>Muzikë e Mirë - 08:00 - 10:00</li>
-            <li>Lajmet e Mëngjesit - 10:00 - 11:00</li>
-            <li>Intervista Speciale - 14:00 - 15:00</li>
-            <li>Çdo të enjte - Livestream Kalceto te Xon Kulla - 19:00 - 20:00</li>
-        </ul>
-    </section>
-
-    <section id="contact" class="contact">
-        <h2>Kontakt</h2>
-        <p>Na kontaktoni në: <a href="mailto:contact@radioal.com">contact@radioal.com</a></p>
-    </section>
-
-    <footer>
+        <button type="button" id="pwa-install-footer-btn" class="pwa-install-footer-btn" hidden>
+            <i class="fas fa-mobile-alt"></i>
+            Instalo aplikacionin
+        </button>
         <p>&copy; 2023 Radio AL. Të gjitha të drejtat e rezervuara.</p>
         <div class="social-icons">
             <a href="#"><i class="fab fa-facebook"></i></a>
@@ -302,6 +470,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=11"></script>
 </body>
 </html>
