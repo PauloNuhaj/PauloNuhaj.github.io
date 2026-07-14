@@ -1,0 +1,24 @@
+{
+  "short_name": "Radio AL",
+  "name": "Radio AL - Radioja Juaj e Preferuar",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0b0f16",
+  "theme_color": "#0f172a",
+  "display": "standalone",
+  "scope": "/",
+  "orientation": "any"
+}

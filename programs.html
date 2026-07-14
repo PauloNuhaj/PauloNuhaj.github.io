@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programet — Radio AL</title>
+    <meta name="description" content="Orari i Radio AL — muzikë, lajme, intervista dhe livestream çdo të enjte.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="programs.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="programs-page">
+    <div class="programs-ambient" aria-hidden="true">
+        <span class="programs-tick"></span>
+        <span class="programs-tick programs-tick-2"></span>
+    </div>
+
+    <header>
+        <a class="logo" href="index.html">
+            <img src="Radio.png" alt="Radio AL Logo">
+            <span class="logo-tag">On Air</span>
+        </a>
+        <div class="header-controls">
+            <button id="dark-mode-toggle" class="dark-mode-toggle" title="Dark Mode" aria-label="Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+    <div id="nav-backdrop" class="nav-backdrop" hidden></div>
+    <nav class="nav-menu" id="nav-menu" aria-hidden="true">
+        <ul>
+            <li><a href="index.html">Kryefaqja</a></li>
+            <li><a href="about.html">Rreth Nesh</a></li>
+            <li><a href="programs.html" aria-current="page">Programet</a></li>
+            <li><a href="index.html#contact">Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <main class="programs-main">
+        <section class="programs-hero">
+            <p class="programs-kicker">Orari · 24/7 signal</p>
+            <h1>Programet</h1>
+            <p class="programs-lead">Nga mëngjesi me muzikë e lajme, te nata me livestream — ja ku ndalet diali yt.</p>
+        </section>
+
+        <section class="programs-board" aria-label="Orari i programeve">
+            <div class="programs-ruler" aria-hidden="true">
+                <span>08</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span>
+            </div>
+
+            <ol class="schedule">
+                <li class="schedule-card" style="--i: 0">
+                    <div class="schedule-time">
+                        <span class="schedule-clock">08:00</span>
+                        <span class="schedule-sep">–</span>
+                        <span class="schedule-clock">10:00</span>
+                    </div>
+                    <div class="schedule-body">
+                        <span class="schedule-tag">Mëngjes</span>
+                        <h2>Muzikë e Mirë</h2>
+                        <p>Fillimi i ditës me ritme të ngrohta dhe energji të pastër.</p>
+                    </div>
+                    <div class="schedule-icon" aria-hidden="true"><i class="fas fa-sun"></i></div>
+                </li>
+
+                <li class="schedule-card" style="--i: 1">
+                    <div class="schedule-time">
+                        <span class="schedule-clock">10:00</span>
+                        <span class="schedule-sep">–</span>
+                        <span class="schedule-clock">11:00</span>
+                    </div>
+                    <div class="schedule-body">
+                        <span class="schedule-tag">Info</span>
+                        <h2>Lajmet e Mëngjesit</h2>
+                        <p>Përmbledhje e shkurtër e lajmeve që të mbajnë të informuar.</p>
+                    </div>
+                    <div class="schedule-icon" aria-hidden="true"><i class="fas fa-newspaper"></i></div>
+                </li>
+
+                <li class="schedule-card" style="--i: 2">
+                    <div class="schedule-time">
+                        <span class="schedule-clock">14:00</span>
+                        <span class="schedule-sep">–</span>
+                        <span class="schedule-clock">15:00</span>
+                    </div>
+                    <div class="schedule-body">
+                        <span class="schedule-tag">Talk</span>
+                        <h2>Intervista Speciale</h2>
+                        <p>Zëra, histori dhe biseda që dalin jashtë frekuencës së zakonshme.</p>
+                    </div>
+                    <div class="schedule-icon" aria-hidden="true"><i class="fas fa-microphone"></i></div>
+                </li>
+
+                <li class="schedule-card schedule-card-live" style="--i: 3">
+                    <div class="schedule-time">
+                        <span class="schedule-clock">19:00</span>
+                        <span class="schedule-sep">–</span>
+                        <span class="schedule-clock">20:00</span>
+                    </div>
+                    <div class="schedule-body">
+                        <span class="schedule-tag schedule-tag-live">
+                            <span class="live-dot"></span> Çdo të enjte
+                        </span>
+                        <h2>Livestream Kalceto te Xon Kulla</h2>
+                        <p>Live special — atmosfera, muzika dhe momenti që nuk duhet ta humbasësh.</p>
+                    </div>
+                    <div class="schedule-icon" aria-hidden="true"><i class="fas fa-broadcast-tower"></i></div>
+                </li>
+            </ol>
+        </section>
+
+        <div class="programs-cta-row">
+            <a class="programs-cta" href="index.html#channels">
+                <i class="fas fa-play"></i>
+                Luaj një kanal tani
+            </a>
+            <a class="programs-cta programs-cta-ghost" href="about.html">
+                Rreth Radio AL
+            </a>
+        </div>
+    </main>
+
+    <footer id="contact">
+        <p class="footer-contact">
+            Kontakt: <a href="mailto:contact@radioal.com">contact@radioal.com</a>
+        </p>
+        <p>&copy; 2023 Radio AL. Të gjitha të drejtat e rezervuara.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <script src="about.js"></script>
+</body>
+</html>
